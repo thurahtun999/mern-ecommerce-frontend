@@ -91,7 +91,7 @@ type Product = {
 } 
     
             setName("");
-            setPrice("")
+            setPrice("");
             setDescription("");
             setCategory("");
             setStock("");
