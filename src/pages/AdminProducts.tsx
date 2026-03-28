@@ -61,13 +61,9 @@ type Product = {
         }
         
         const url = editingId ?
-        `${API_URL}/api/products/${editingId}`:
-        `${API_URL}/api/products`;
+        `${API_URL}/api/products/${editingId}` : `${API_URL}/api/products`;
 
         const method = editingId ? "PUT": "POST";
-
-        console.log("Final URL:", url);
-        console.log("editingId:", editingId);
 
 
         const res = await fetch(url,
