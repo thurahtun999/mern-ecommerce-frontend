@@ -46,6 +46,7 @@ type Product = {
 
     const addProduct = async () => {
         console.log("ID:", editingId);
+        console.log("Price:", price);
         const token = localStorage.getItem("token");
 
          const formData = new FormData();
