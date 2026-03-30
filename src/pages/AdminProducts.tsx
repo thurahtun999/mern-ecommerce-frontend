@@ -13,6 +13,11 @@ type Product = {
 
  export default function AdminProducts() {
 
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState("");
+    const [error, setError] = useState("");
+
+
     const [products, setProducts] = useState<Product[]>([]);
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
@@ -45,9 +50,22 @@ type Product = {
     }, []);
 
     const addProduct = async () => {
-        console.log("ID:", editingId);
-        console.log("Price:", price);
+
+        if (price === "" || stock === "") {
+            setError("Price and Stock are required");
+
+            setTimeout(() => {
+                setError("");
+                }, 2000);
+
+                return;
+
+            } 
+        
+        setLoading(true);
+        
         const token = localStorage.getItem("token");
+
 
          const formData = new FormData();
 
@@ -77,7 +95,18 @@ type Product = {
             });
             
             const data = await res.json();
-            console.log("Server Response:", data);
+          
+            if(res.ok) {
+                setSuccess("Product updated successfully") ;
+
+                setTimeout(() => {
+                    setSuccess("");
+                }, 2000);
+            } else {
+                setError(data.message);
+            }
+            setLoading(false)
+                    
             if(editingId) {
            setProducts((prev) =>
         prev.map((p) => (p.id === data.id ? 
@@ -95,6 +124,7 @@ type Product = {
             setEditingId(null);
 
             fetchProducts();
+            setLoading(false);
     };
     const deleteProduct = async (id: string) => {
         if (!window.confirm("Delete this product?")) return;
@@ -119,6 +149,10 @@ type Product = {
     return (
         <div>
             <h2>Admin Products</h2>
+
+            {success && <p className="successError" >{success}</p>}
+
+            {error && <p className="Error">{error}</p>}
 
             {/* Add Produdct Form */}
 
@@ -166,7 +200,9 @@ type Product = {
             
 
                 <button onClick={addProduct}>
-                    {editingId? "Update Product": "Add Product"} 
+                    {loading ? "Loading..." : editingId ? "Update Product" :
+                    "Add Product"}
+
                     </button>
 
                     <hr />
